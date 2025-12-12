@@ -25,6 +25,11 @@ services:
       - minio
       - createbuckets
 
+
+
+
+
+
   delineate-jaeger:
     image: jaegertracing/all-in-one:latest
     ports:
