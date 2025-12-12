@@ -54,13 +54,13 @@ jobs:
           # Install mc (MinIO Client)
           curl https://dl.min.io/client/mc/release/linux-amd64/mc -o /usr/bin/mc
           chmod +x /usr/bin/mc
-          
+
           # Wait for MinIO to be ready (service health check helps, but being safe)
           sleep 5
-          
+
           # Configure alias
           mc config host add myminio http://minio:9000 minioadmin minioadmin
-          
+
           # Create bucket and set public
           mc mb myminio/downloads
           mc anonymous set public myminio/downloads
