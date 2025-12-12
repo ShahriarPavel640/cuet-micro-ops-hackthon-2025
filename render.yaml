@@ -15,7 +15,7 @@ services:
         value: production
 
   # A static site for the React frontend
-  - type: static
+  - type: static_site
     name: micro-ops-frontend
     plan: free
     # Be sure to update this if your main branch is not master
