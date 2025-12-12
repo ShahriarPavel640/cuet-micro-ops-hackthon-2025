@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/utils/index.ts"],
+  "sourcesContent": ["/** biome-ignore-all lint/performance/noBarrelFile: entrypoint */\nexport type { ENTITY_BRANDS } from './nanoid'\nexport { nanoidSchema } from './nanoid'\nexport type { UnknownObject } from './utility-types'\n"],
+  "mappings": "AAEA,SAAS,oBAAoB;",
+  "names": []
+}

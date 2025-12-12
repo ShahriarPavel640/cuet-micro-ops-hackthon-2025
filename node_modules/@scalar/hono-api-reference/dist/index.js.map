@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../src/index.ts"],
+  "sourcesContent": ["export { apiReference, Scalar } from './scalar'\nexport type { ApiReferenceConfiguration } from './types'\n"],
+  "mappings": "AAAA,SAAS,cAAc,cAAc;",
+  "names": []
+}

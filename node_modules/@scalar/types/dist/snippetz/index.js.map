@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/snippetz/index.ts"],
+  "sourcesContent": ["/** biome-ignore-all lint/performance/noBarrelFile: entrypoint */\nexport type {\n  AvailableClient,\n  AvailableClients,\n  AvailableClientsArray,\n  ClientId,\n  FormDataParam,\n  HarRequest,\n  Plugin,\n  PluginConfiguration,\n  Target,\n  TargetId,\n} from './snippetz'\nexport { AVAILABLE_CLIENTS } from './snippetz'\n"],
+  "mappings": "AAaA,SAAS,yBAAyB;",
+  "names": []
+}
