@@ -14,6 +14,20 @@ import { secureHeaders } from "hono/secure-headers";
 import { timeout } from "hono/timeout";
 import { rateLimiter } from "hono-rate-limiter";
 
+// --- FIX START: Define Types to satisfy Linting ---
+
+// Define a minimal interface for Sentry to avoid using 'any'
+interface SentryInstance {
+  captureException(exception: unknown): void;
+}
+
+// Use interface instead of type (Fixes: @typescript-eslint/consistent-type-definitions)
+interface Variables {
+  requestId: string;
+  sentry?: SentryInstance; // Fixes: @typescript-eslint/no-explicit-any
+}
+// --- FIX END ---
+
 // Helper for optional URL that treats empty string as undefined
 const optionalUrl = z
   .string()
@@ -74,7 +88,9 @@ const otelSDK = new NodeSDK({
 });
 otelSDK.start();
 
-const app = new OpenAPIHono();
+// --- FIX START: Apply Generics to OpenAPIHono ---
+const app = new OpenAPIHono<{ Variables: Variables }>();
+// --- FIX END ---
 
 // Request ID middleware - adds unique ID to each request
 app.use(async (c, next) => {
@@ -143,8 +159,14 @@ const ErrorResponseSchema = z
 
 // Error handler with Sentry
 app.onError((err, c) => {
-  c.get("sentry").captureException(err);
-  const requestId = c.get("requestId") as string | undefined;
+  // Fix: Safe access to typed Sentry variable
+  const sentryInstance = c.get("sentry");
+
+  if (sentryInstance) {
+    sentryInstance.captureException(err);
+  }
+
+  const requestId = c.get("requestId");
   return c.json(
     {
       error: "Internal Server Error",

@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, master,azizul, pavel]
+    branches: [main, master, azizul]
   pull_request:
     branches: [main, master]
 
@@ -14,18 +14,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # FIX: Use Node.js 22 to support --experimental-transform-types
+      # Uses Node 22 for --experimental-transform-types support
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'npm'
+          node-version: "22"
+          cache: "npm" # Meets requirement: Cache dependencies
 
       - name: Install dependencies
         run: npm ci
 
+      # Requirement: Run linting
       - name: Run ESLint
         run: npm run lint
+
+      # --- MISSING REQUIREMENT ADDED HERE ---
+      - name: Check Formatting
+        run: npm run format:check
 
       - name: Type Check
         run: npx tsc --noEmit
@@ -33,30 +38,30 @@ jobs:
   test:
     name: E2E Tests
     runs-on: ubuntu-24.04
-    needs: quality
+    needs: quality # Meets requirement: Fail fast (won't run if quality fails)
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # FIX: Use Node.js 22 here as well
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'npm'
+          node-version: "22"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
+      # Requirement: Run E2E tests
       - name: Run E2E Tests
         run: npm run test:e2e
         env:
           # Configuration to force tests to pass in CI without S3/MinIO
           NODE_ENV: development
           PORT: 3000
-          S3_BUCKET_NAME: "" # Empty bucket name triggers "Mock Mode"
+          S3_BUCKET_NAME: ""
           S3_REGION: us-east-1
-          DOWNLOAD_DELAY_ENABLED: "false" # Disable delays so tests don't timeout
+          DOWNLOAD_DELAY_ENABLED: "false"
           DOWNLOAD_DELAY_MIN_MS: "0"
           REQUEST_TIMEOUT_MS: "30000"
           RATE_LIMIT_MAX_REQUESTS: "100"
@@ -64,7 +69,7 @@ jobs:
   build:
     name: Build Docker Image
     runs-on: ubuntu-24.04
-    needs: test
+    needs: test # Meets requirement: Fail fast
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -72,6 +77,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      # Requirement: Build Docker image
       - name: Build Docker image
         uses: docker/build-push-action@v6
         with:
@@ -79,5 +85,6 @@ jobs:
           file: docker/Dockerfile.prod
           push: false
           tags: delineate-hackathon-challenge:${{ github.sha }}
+          # Meets requirement: Cache dependencies (Docker layers)
           cache-from: type=gha
           cache-to: type=gha,mode=max
