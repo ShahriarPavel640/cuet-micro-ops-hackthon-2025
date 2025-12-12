@@ -15,7 +15,7 @@ services:
         value: production
 
   # A static site for the React frontend
-  - type: static_site
+  - type: static
     name: micro-ops-frontend
     plan: free
     # Be sure to update this if your main branch is not master
@@ -28,8 +28,8 @@ services:
       - frontend/src/**/*.css
       - frontend/package.json
       - frontend/vite.config.ts
-    buildcommand: npm install && npm run build
-    publishPath: dist
+    buildCommand: npm install && npm run build
+    publishDir: dist
     envVars:
       - key: VITE_API_URL
         fromService:
