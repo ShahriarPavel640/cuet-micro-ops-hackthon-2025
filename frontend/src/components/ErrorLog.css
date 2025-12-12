@@ -1,0 +1,131 @@
+.error-log-card {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.error-log-card .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.error-log-card .card-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.header-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 6px;
+    padding: 0.375rem 0.5rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: background 0.2s;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.test-error-btn {
+    width: 100%;
+    padding: 0.625rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 8px;
+    color: #ef4444;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 1rem;
+}
+
+.test-error-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.error-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 2rem;
+    color: #6b7280;
+    text-align: center;
+}
+
+.empty-icon {
+    font-size: 2rem;
+}
+
+.error-item {
+    background: rgba(239, 68, 68, 0.05);
+    border-radius: 8px;
+    padding: 0.75rem;
+    border-left: 3px solid #ef4444;
+}
+
+.error-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.error-icon {
+    font-size: 0.875rem;
+}
+
+.error-message {
+    flex: 1;
+    font-size: 0.875rem;
+    color: #fca5a5;
+    word-break: break-word;
+}
+
+.error-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.error-time {
+    font-size: 0.7rem;
+    color: #6b7280;
+}
+
+.feedback-btn {
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
+    color: #818cf8;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.feedback-btn:hover {
+    background: rgba(99, 102, 241, 0.2);
+}

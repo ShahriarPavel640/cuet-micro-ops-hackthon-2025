@@ -65,3 +65,23 @@ services:
       echo 'Bucket created successfully';
       exit 0;
       "
+
+  # --- Observability Dashboard (Challenge 4) ---
+  delineate-frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ../frontend/src:/app/src
+      - ../frontend/public:/app/public
+    environment:
+      - VITE_API_URL=http://localhost:3000
+      - VITE_SENTRY_DSN=
+      - VITE_OTEL_ENDPOINT=http://localhost:4318
+      - VITE_JAEGER_UI_URL=http://localhost:16686
+    depends_on:
+      - delineate-app
+      - delineate-jaeger
+

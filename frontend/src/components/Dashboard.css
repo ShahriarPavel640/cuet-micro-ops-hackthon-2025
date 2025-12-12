@@ -1,0 +1,144 @@
+.dashboard {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+    padding: 1.5rem;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.header-content h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    margin: 0.5rem 0 0 0;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.header-badge {
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    color: #818cf8;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.dashboard-grid>*:nth-child(3) {
+    grid-column: span 2;
+}
+
+.dashboard-grid>*:nth-child(5) {
+    grid-column: span 3;
+}
+
+.dashboard-footer {
+    text-align: center;
+    padding: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dashboard-footer p {
+    margin: 0;
+    font-size: 0.75rem;
+    color: #4b5563;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dashboard-grid>*:nth-child(3) {
+        grid-column: span 2;
+    }
+
+    .dashboard-grid>*:nth-child(5) {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard {
+        padding: 1rem;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-content h1 {
+        font-size: 1.5rem;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-grid>* {
+        grid-column: span 1 !important;
+    }
+}
+
+/* Animation for cards */
+.dashboard-grid>* {
+    animation: fadeInUp 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+.dashboard-grid>*:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.dashboard-grid>*:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.dashboard-grid>*:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.dashboard-grid>*:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.dashboard-grid>*:nth-child(5) {
+    animation-delay: 0.5s;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
