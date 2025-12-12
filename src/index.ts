@@ -14,11 +14,18 @@ import { secureHeaders } from "hono/secure-headers";
 import { timeout } from "hono/timeout";
 import { rateLimiter } from "hono-rate-limiter";
 
-// --- FIX START: Define Variables Type ---
-type Variables = {
+// --- FIX START: Define Types to satisfy Linting ---
+
+// Define a minimal interface for Sentry to avoid using 'any'
+interface SentryInstance {
+  captureException(exception: unknown): void;
+}
+
+// Use interface instead of type (Fixes: @typescript-eslint/consistent-type-definitions)
+interface Variables {
   requestId: string;
-  sentry: any;
-};
+  sentry?: SentryInstance; // Fixes: @typescript-eslint/no-explicit-any
+}
 // --- FIX END ---
 
 // Helper for optional URL that treats empty string as undefined
@@ -152,8 +159,9 @@ const ErrorResponseSchema = z
 
 // Error handler with Sentry
 app.onError((err, c) => {
-  // Use optional chaining for safety
+  // Fix: Safe access to typed Sentry variable
   const sentryInstance = c.get("sentry");
+  
   if (sentryInstance) {
     sentryInstance.captureException(err);
   }
