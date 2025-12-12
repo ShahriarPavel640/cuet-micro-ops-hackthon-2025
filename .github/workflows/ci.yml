@@ -46,11 +46,11 @@ jobs:
           # Download MinIO Server
           curl https://dl.min.io/server/minio/release/linux-amd64/minio -o /usr/bin/minio
           chmod +x /usr/bin/minio
-          
+
           # Start MinIO in background
           mkdir -p /data
           MINIO_ROOT_USER=minioadmin MINIO_ROOT_PASSWORD=minioadmin /usr/bin/minio server /data --address ":9000" &
-          
+
           # Give it a moment to start
           sleep 5
 
@@ -59,10 +59,10 @@ jobs:
           # Install mc (MinIO Client)
           curl https://dl.min.io/client/mc/release/linux-amd64/mc -o /usr/bin/mc
           chmod +x /usr/bin/mc
-          
+
           # Configure alias (using localhost)
           mc alias set myminio http://localhost:9000 minioadmin minioadmin
-          
+
           # Create bucket and set public
           mc mb myminio/downloads
           mc anonymous set public myminio/downloads
