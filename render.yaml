@@ -1,0 +1,38 @@
+# render.yaml
+services:
+  # A Node.js web service
+  - type: web
+    name: micro-ops-backend
+    env: node
+    plan: free
+    # Be sure to update this if your main branch is not master
+    branch: pavel
+    healthCheckPath: /
+    initialDeployHook: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+  # A static site for the React frontend
+  - type: static
+    name: micro-ops-frontend
+    plan: free
+    # Be sure to update this if your main branch is not master
+    branch: pavel
+    rootDir: frontend
+    buildFilter:
+      paths:
+      - frontend/src/**/*.tsx
+      - frontend/src/**/*.ts
+      - frontend/src/**/*.css
+      - frontend/package.json
+      - frontend/vite.config.ts
+    buildcommand: npm install && npm run build
+    publishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: micro-ops-backend
+          property: url

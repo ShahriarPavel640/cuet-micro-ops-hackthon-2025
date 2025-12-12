@@ -1,5 +1,5 @@
 import { captureException, addBreadcrumb } from "./sentry";
-import { setCurrentTraceId, getCurrentTraceId } from "./tracing";
+import { setCurrentTraceId, getCurrentTraceId, getTraceHeaders } from "./tracing";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 console.log("[API] Using API_URL:", API_URL);
@@ -109,8 +109,8 @@ async function apiRequest<T>(
             ...options,
             headers: {
                 "Content-Type": "application/json",
-                // Note: traceparent header removed due to CORS restrictions
-                // The backend would need to add "traceparent" to Access-Control-Allow-Headers
+                // Include W3C Trace Context headers for distributed tracing
+                ...getTraceHeaders(),
                 ...options.headers,
             },
         });
