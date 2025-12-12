@@ -47,7 +47,7 @@ async function waitForServer(): Promise<void> {
       const response = await fetch(`${BASE_URL}/health`);
       // Accept 200 (healthy) or 503 (unhealthy but server is running)
       if (response.status === 200 || response.status === 503) {
-        console.log("Server is ready!!!");
+        console.log("Server is ready!?");
         return;
       }
     } catch {
