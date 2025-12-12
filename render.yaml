@@ -10,11 +10,12 @@ services:
     envVars:
       - key: NODE_VERSION
         value: 20.11.1
+      # IMPORTANT: Add your secrets (S3, Sentry, OTel) in the Render Dashboard
 
   - type: web
     name: micro-ops-frontend
     env: static
     rootDir: ./frontend
-    plan: free
+    # plan: free  <-- REMOVED (Static sites don't use this key)
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
