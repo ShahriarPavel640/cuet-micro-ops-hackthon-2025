@@ -1,7 +1,8 @@
 import { captureException, addBreadcrumb } from "./sentry";
-import { getTraceHeaders, setCurrentTraceId, getCurrentTraceId } from "./tracing";
+import { setCurrentTraceId, getCurrentTraceId } from "./tracing";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+console.log("[API] Using API_URL:", API_URL);
 
 export interface HealthResponse {
     status: "healthy" | "unhealthy";
@@ -87,6 +88,8 @@ async function apiRequest<T>(
     const startTime = Date.now();
     const url = `${API_URL}${endpoint}`;
 
+    console.log(`[API] Requesting: ${url}`);
+
     // Get or generate trace ID
     let traceId = getCurrentTraceId();
     if (!traceId) {
@@ -106,10 +109,13 @@ async function apiRequest<T>(
             ...options,
             headers: {
                 "Content-Type": "application/json",
-                ...getTraceHeaders(),
+                // Note: traceparent header removed due to CORS restrictions
+                // The backend would need to add "traceparent" to Access-Control-Allow-Headers
                 ...options.headers,
             },
         });
+
+        console.log(`[API] Response: ${response.status} ${response.statusText}`);
 
         const duration = Date.now() - startTime;
 
@@ -139,6 +145,7 @@ async function apiRequest<T>(
 
         return response.json();
     } catch (error) {
+        console.error(`[API] Error fetching ${url}:`, error);
         const duration = Date.now() - startTime;
 
         // Record failed metrics

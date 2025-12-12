@@ -93,11 +93,33 @@
     box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
 }
 
+.jobs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
 .jobs-list h3 {
     font-size: 0.875rem;
     color: #9ca3af;
-    margin: 0 0 0.75rem 0;
+    margin: 0;
     font-weight: 500;
+}
+
+.clear-btn {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.clear-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
 }
 
 .empty-state {

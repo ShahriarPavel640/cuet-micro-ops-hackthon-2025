@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     api,
     type DownloadInitiateResponse,
@@ -8,6 +8,8 @@ import { getCurrentTraceId } from "../lib/tracing";
 import { captureException } from "../lib/sentry";
 import "./DownloadJobs.css";
 
+const JOBS_STORAGE_KEY = "observability_dashboard_jobs";
+
 interface DownloadJob {
     id: string;
     fileId: number;
@@ -15,16 +17,43 @@ interface DownloadJob {
     result?: DownloadCheckResponse | DownloadInitiateResponse;
     error?: string;
     traceId?: string;
-    timestamp: Date;
+    timestamp: string; // Changed to string for JSON serialization
 }
+
+// Load jobs from localStorage
+const loadJobsFromStorage = (): DownloadJob[] => {
+    try {
+        const stored = localStorage.getItem(JOBS_STORAGE_KEY);
+        if (stored) {
+            return JSON.parse(stored);
+        }
+    } catch (e) {
+        console.error("Failed to load jobs from storage:", e);
+    }
+    return [];
+};
+
+// Save jobs to localStorage
+const saveJobsToStorage = (jobs: DownloadJob[]) => {
+    try {
+        localStorage.setItem(JOBS_STORAGE_KEY, JSON.stringify(jobs));
+    } catch (e) {
+        console.error("Failed to save jobs to storage:", e);
+    }
+};
 
 export function DownloadJobs() {
     const [fileId, setFileId] = useState("");
-    const [jobs, setJobs] = useState<DownloadJob[]>([]);
+    const [jobs, setJobs] = useState<DownloadJob[]>(() => loadJobsFromStorage());
     const [loading, setLoading] = useState(false);
 
+    // Save jobs to localStorage whenever they change
+    useEffect(() => {
+        saveJobsToStorage(jobs);
+    }, [jobs]);
+
     const addJob = (job: DownloadJob) => {
-        setJobs((prev) => [job, ...prev].slice(0, 10)); // Keep last 10 jobs
+        setJobs((prev) => [job, ...prev].slice(0, 20)); // Keep last 20 jobs
     };
 
     const updateJob = (id: string, updates: Partial<DownloadJob>) => {
@@ -33,6 +62,11 @@ export function DownloadJobs() {
                 job.id === id ? { ...job, ...updates } : job
             )
         );
+    };
+
+    const clearJobs = () => {
+        setJobs([]);
+        localStorage.removeItem(JOBS_STORAGE_KEY);
     };
 
     const handleCheckDownload = async () => {
@@ -45,7 +79,7 @@ export function DownloadJobs() {
             id: jobId,
             fileId: fileIdNum,
             status: "checking",
-            timestamp: new Date(),
+            timestamp: new Date().toISOString(),
         });
 
         setLoading(true);
@@ -79,7 +113,7 @@ export function DownloadJobs() {
             id: jobId,
             fileId: fileIdNum,
             status: "queued",
-            timestamp: new Date(),
+            timestamp: new Date().toISOString(),
         });
 
         setLoading(true);
@@ -115,7 +149,7 @@ export function DownloadJobs() {
             id: jobId,
             fileId: fileIdNum,
             status: "checking",
-            timestamp: new Date(),
+            timestamp: new Date().toISOString(),
         });
 
         setLoading(true);
@@ -194,7 +228,14 @@ export function DownloadJobs() {
                 </div>
 
                 <div className="jobs-list">
-                    <h3>Recent Jobs</h3>
+                    <div className="jobs-header">
+                        <h3>Recent Jobs</h3>
+                        {jobs.length > 0 && (
+                            <button onClick={clearJobs} className="clear-btn">
+                                🗑️ Clear
+                            </button>
+                        )}
+                    </div>
                     {jobs.length === 0 ? (
                         <div className="empty-state">No jobs yet. Enter a file ID and click a button to start.</div>
                     ) : (
@@ -215,7 +256,7 @@ export function DownloadJobs() {
                                         </div>
                                     )}
                                     <div className="job-time">
-                                        {job.timestamp.toLocaleTimeString()}
+                                        {new Date(job.timestamp).toLocaleTimeString()}
                                     </div>
                                 </div>
                             ))}
