@@ -1,9 +1,9 @@
 sequenceDiagram
-    participant U as User (Frontend)
-    participant A as API Service
-    participant Q as Redis Queue (BullMQ)
-    participant W as Worker Service
-    participant S3 as Object Storage
+participant U as User (Frontend)
+participant A as API Service
+participant Q as Redis Queue (BullMQ)
+participant W as Worker Service
+participant S3 as Object Storage
 
     Note over U, A: Phase 1: Initiation
     U->>A: POST /download/start (Request File)

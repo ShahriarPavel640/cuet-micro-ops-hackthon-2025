@@ -18,8 +18,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'npm' # Meets requirement: Cache dependencies
+          node-version: "22"
+          cache: "npm" # Meets requirement: Cache dependencies
 
       - name: Install dependencies
         run: npm ci
@@ -46,8 +46,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'npm'
+          node-version: "22"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -59,7 +59,7 @@ jobs:
           # Configuration to force tests to pass in CI without S3/MinIO
           NODE_ENV: development
           PORT: 3000
-          S3_BUCKET_NAME: "" 
+          S3_BUCKET_NAME: ""
           S3_REGION: us-east-1
           DOWNLOAD_DELAY_ENABLED: "false"
           DOWNLOAD_DELAY_MIN_MS: "0"

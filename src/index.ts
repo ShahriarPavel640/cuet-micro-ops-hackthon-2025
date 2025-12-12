@@ -161,11 +161,11 @@ const ErrorResponseSchema = z
 app.onError((err, c) => {
   // Fix: Safe access to typed Sentry variable
   const sentryInstance = c.get("sentry");
-  
+
   if (sentryInstance) {
     sentryInstance.captureException(err);
   }
-  
+
   const requestId = c.get("requestId");
   return c.json(
     {

@@ -31,7 +31,7 @@ services:
     image: jaegertracing/all-in-one:latest
     ports:
       - "16686:16686" # UI
-      - "4318:4318"   # Collector
+      - "4318:4318" # Collector
     environment:
       - COLLECTOR_OTLP_ENABLED=true
     restart: unless-stopped
