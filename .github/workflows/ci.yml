@@ -59,7 +59,7 @@ jobs:
           sleep 5
 
           # Configure alias
-          mc config host add myminio http://minio:9000 minioadmin minioadmin
+          mc alias set myminio http://minio:9000 minioadmin minioadmin
 
           # Create bucket and set public
           mc mb myminio/downloads
