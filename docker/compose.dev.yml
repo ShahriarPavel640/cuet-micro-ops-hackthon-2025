@@ -9,13 +9,24 @@ services:
       - "3000:3000"
     volumes:
       - ../src:/app/src
+      - ../.env:/app/.env
     env_file:
       - ../.env
     environment:
       - NODE_ENV=development
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://delineate-jaeger:4318
+      # --- S3 Configuration ---
+      - S3_ENDPOINT=http://delineate-minio:9000
+      - S3_ACCESS_KEY_ID=minioadmin
+      - S3_SECRET_ACCESS_KEY=minioadmin
+      - S3_BUCKET_NAME=downloads
+      - S3_FORCE_PATH_STYLE=true
+      - AWS_REGION=us-east-1
     depends_on:
-      - delineate-jaeger
+      delineate-jaeger:
+        condition: service_started
+      delineate-createbuckets:
+        condition: service_completed_successfully
 
   delineate-jaeger:
     image: jaegertracing/all-in-one:latest
@@ -24,3 +35,33 @@ services:
       - "4318:4318"
     environment:
       - COLLECTOR_OTLP_ENABLED=true
+
+  # --- New Service: MinIO (S3 Storage) ---
+  delineate-minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000" # API Port
+      - "9001:9001" # Console Port
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 20s
+      retries: 3
+
+  # --- New Service: Bucket Creator (Init Script) ---
+  delineate-createbuckets:
+    image: minio/mc
+    depends_on:
+      delineate-minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set myminio http://delineate-minio:9000 minioadmin minioadmin;
+      /usr/bin/mc mb myminio/downloads --ignore-existing;
+      echo 'Bucket created successfully';
+      exit 0;
+      "
